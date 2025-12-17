@@ -76,7 +76,9 @@ class PersonaInterestPlugin(Star):
     @filter.on_llm_request(priority=10)
     async def interest_analyzer(self, event: AstrMessageEvent, req: ProviderRequest):
         subject_id = event.get_group_id() or event.get_sender_id()
-        if subject_id not in self.config.get("whitelist", []):
+        whitelist = self.config.get("whitelist", [])
+        # 当白名单为空时，默认对所有聊天生效
+        if whitelist and subject_id not in whitelist:
             return
         if event.get_platform_name() != "aiocqhttp": return
 
@@ -161,7 +163,9 @@ class PersonaInterestPlugin(Star):
     @filter.on_llm_response(priority=10)
     async def save_llm_reply_to_history(self, event: AstrMessageEvent, resp: LLMResponse):
         subject_id = event.get_group_id() or event.get_sender_id()
-        if subject_id not in self.config.get("whitelist", []):
+        whitelist = self.config.get("whitelist", [])
+        # 当白名单为空时，默认对所有聊天生效
+        if whitelist and subject_id not in whitelist:
             return
 
         session_id = event.unified_msg_origin

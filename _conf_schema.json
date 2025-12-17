@@ -2,7 +2,7 @@
   "whitelist": {
     "description": "白名单 (同时适用于群聊和私聊)",
     "type": "list",
-    "hint": "插件仅在白名单内的会话生效。请填写群号或用户QQ号（字符串格式）。",
+    "hint": "插件仅在白名单内的会话生效。请填写群号或用户QQ号（字符串格式）。留空则对所有会话生效。",
     "default": []
   },
   "analysis_provider_id": {
