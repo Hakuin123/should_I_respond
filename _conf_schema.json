@@ -5,6 +5,12 @@
     "hint": "插件仅在白名单内的会话生效。请填写群号或用户QQ号（字符串格式）。留空则对所有会话生效。",
     "default": []
   },
+  "only_active_reply_trigger": {
+    "description": "仅主动回复触发时运行",
+    "type": "bool",
+    "hint": "启用后，插件只会在群聊中“非@/非唤醒词”的主动回复触发场景运行。关闭时保持原行为。",
+    "default": false
+  },
   "analysis_provider_id": {
     "description": "用于分析的LLM供应商ID",
     "type": "string",

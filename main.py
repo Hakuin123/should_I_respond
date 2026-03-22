@@ -73,12 +73,18 @@ class PersonaInterestPlugin(Star):
             return ""
         except Exception: return ""
 
+    def _is_active_reply_trigger(self, event: AstrMessageEvent) -> bool:
+        # AstrBot built-in active reply only triggers in group chats and is not an @/wake command.
+        return bool(event.get_group_id()) and not event.is_at_or_wake_command
+
     @filter.on_llm_request(priority=10)
     async def interest_analyzer(self, event: AstrMessageEvent, req: ProviderRequest):
         subject_id = event.get_group_id() or event.get_sender_id()
         whitelist = self.config.get("whitelist", [])
         # 当白名单为空时，默认对所有聊天生效
         if whitelist and subject_id not in whitelist:
+            return
+        if self.config.get("only_active_reply_trigger", False) and not self._is_active_reply_trigger(event):
             return
         if event.get_platform_name() != "aiocqhttp": return
 
@@ -166,6 +172,8 @@ class PersonaInterestPlugin(Star):
         whitelist = self.config.get("whitelist", [])
         # 当白名单为空时，默认对所有聊天生效
         if whitelist and subject_id not in whitelist:
+            return
+        if self.config.get("only_active_reply_trigger", False) and not self._is_active_reply_trigger(event):
             return
 
         session_id = event.unified_msg_origin
